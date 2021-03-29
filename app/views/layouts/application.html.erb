@@ -12,7 +12,15 @@
 
   <body>
   <%= link_to 'Home', root_path %>
+
   <%= link_to 'Contact', contact_new_path %>
+
+  <%= link_to 'New Question', new_question_path %>
+
+  <%= link_to 'Show all', questions_path %>
+  
+
+
     <%= yield %>
   </body>
 </html>

@@ -1,0 +1,30 @@
+<h1>New Question Form</h1>
+
+<%#
+  To create a form for resource (i.e. a model), use the 
+  form_with helper instead of the form_tag. Its argumments are:
+  1. A named argument "model" which is assigned an instance of 
+    the model. This question instance will be a new question
+    from the new action. form_with checks to see if the instance
+    of the question is persisted. If it is, upon submission of 
+    this form a PATCH request is made, otherwise it makes a POST
+  2. A named argument "local". We set this to true so that it
+    doesn't submit the form using AJAX.
+%>
+<%= form_with(model: @question, local: true) do |form| %>
+  <% if @question.errors.present? %>
+    <p>
+      <%= @question.errors.full_messages.join(", ") %>
+    </p>
+  <% end %>
+  <div>
+    <%= form.label :title %>
+    <%= form.text_field :title %>
+  </div>
+  <div>
+    <%= form.label :body %>
+    <%= form.text_area :body %>
+  </div>
+
+  <%= form.submit %>
+<% end %>
