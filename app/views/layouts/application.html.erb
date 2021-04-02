@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Awesome Answer</title>
+    <title>Awesome Answers</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -11,17 +11,33 @@
   </head>
 
   <body>
-  <br>
-  <%= link_to 'Home', root_path %>
-
-  <%= link_to 'Contact', contact_new_path %>
-
-  <%= link_to 'New Question', new_question_path %>
-
-  <%= link_to 'Show all', questions_path %>
-  
-
-
+    <!-- "link_to" is a method known as a view helper. Use it to generate an anchor tag -->
+    <!-- <a href="/">Home</a> -->
+    <%= link_to 'Home', root_path %>
+    -
+    <%= link_to 'Contact Us', contact_new_path %>
+    -
+  <%= link_to 'All Questions', questions_path %>
+    -
+    <%= link_to 'New Question', new_question_path %>
+    -
+    <% if user_signed_in? %>
+      Hello, <%= current_user.full_name %>
+      -
+      <%= link_to 'Sign Out', session_path, method: :delete, data: {confirm: "Log out?" } %>
+    <% else %>
+      <%= link_to 'Sign In', new_session_path %>
+      -
+      <%= link_to 'Sign Up', new_user_path %>
+    <% end %>
+    <hr>
+    <% flash.each do |type, message| %>
+      <div class="alert alert-<%=type %>" role="alert">
+        <%= message %>
+      </div>
+    <% end %>
+    
+    <!-- yield will render the template of the current controller action -->
     <%= yield %>
   </body>
 </html>

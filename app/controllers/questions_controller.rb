@@ -2,6 +2,7 @@ class QuestionsController < ApplicationController
   # Pass a method name as a symbol to "before_action" to run it before all of the actions listed
   # This will find the question using the "id" from the params and save it to @question,
   # so all of the actions listed has the @question defined.
+  before_action :authenticate_user!, except: [:show, :index]
   before_action :find_question, only: [:show, :edit, :update, :destroy]
 
   def new
@@ -20,6 +21,7 @@ class QuestionsController < ApplicationController
     # render json: params
 
     @question = Question.new question_params
+    @question.user = current_user
 
     if @question.save
       # Use "redirect_to" to tell the browser to make a new request.
@@ -28,6 +30,7 @@ class QuestionsController < ApplicationController
       # to render. But we can also just pass the instance of the question 
       # and rails knows to grab the id from the instance:
       # redirect_to question_path(@question)
+      flash[:primary] = "#{@question.title} created"
       redirect_to question_path(@question.id)
     else
       # If we use "redirect_to", the data in the body will be gone from
@@ -39,6 +42,11 @@ class QuestionsController < ApplicationController
   end
 
   def show
+    # For form_with
+    @answer = Answer.new 
+
+    # For list of answers to display
+    @answers = @question.answers.order(created_at: :desc)
   end
 
   def index
@@ -50,14 +58,16 @@ class QuestionsController < ApplicationController
 
   def update
     if @question.update question_params
+      flash[:dark] = "#{@question.title} updated"
       redirect_to question_path(@question)
     else
       render :edit 
     end
   end
-
+  
   def destroy
     @question.destroy
+    flash[:danger] = "#{@question.title} deleted"
     redirect_to questions_path
   end
 

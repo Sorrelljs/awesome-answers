@@ -15,7 +15,16 @@ class Question < ApplicationRecord
     # title => "My title"
     # When writing the attributes, we have prefix with self (instance)
     # self.title = "My new title"
+
+
+    # Adding the "dependent :destroy" option tells rails to delete the associated 
+    # answers before deleting the question
+    # "has_many" was not automatically added to this model when we generate
+    # answers so make sure you add it when setting up associations.
+    has_many :answers, dependent: :destroy
+    belongs_to :user
   
+
     # === VALIDATIONS ===
     # To create validations, use the "validates" method.
     # The arguments are:
