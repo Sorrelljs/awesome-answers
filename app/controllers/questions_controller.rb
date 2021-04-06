@@ -4,6 +4,9 @@ class QuestionsController < ApplicationController
   # so all of the actions listed has the @question defined.
   before_action :authenticate_user!, except: [:show, :index]
   before_action :find_question, only: [:show, :edit, :update, :destroy]
+  # find_question needs to come before authorize because we need the @question to check
+  # our abilities
+  before_action :authorize, only: [:edit, :update, :destroy] 
 
   def new
     # Create a new instance of a question which will be
@@ -83,5 +86,12 @@ class QuestionsController < ApplicationController
 
   def find_question
     @question = Question.find params[:id]
+  end
+
+  def authorize
+    unless can?(:crud, @question)
+      flash[:danger] = "Not Authorized"
+      redirect_to root_path
+    end
   end
 end

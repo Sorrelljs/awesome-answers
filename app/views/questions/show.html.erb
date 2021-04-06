@@ -6,30 +6,33 @@
   Viewed <%= pluralize(@question.view_count, 'time') %>
 </p>
 <p>
-  Asked <%= time_ago_in_words(@question.created_at) %> ago by <%= @question.user&.full_name || "[deleted]" %>
+  Asked <%= time_ago_in_words(@question.created_at) %> ago 
+  by <%= @question.user&.full_name || "[deleted]" %>
 </p>
 <p>
   Last edited <%= time_ago_in_words(@question.updated_at) %> ago
 </p>
-<div>
-  <%= link_to 'Edit', edit_question_path(@question) %>
-  |
-  <%# 
-    Regular HTML links can only make GET requests. "link_to"
-    allows us to use other verbs such as DELETE. We pass a named
-    argument called "method" with the symbol of the HTTP verb as
-    an argument. If you confirm with the dialog then it will 
-    make the request.
-  %>
-  <%= link_to(
-      'Delete', 
-      question_path(@question),
-      method: :delete,
-      data: { confirm: "Are you sure you want to delete this question?"}
-    ) 
-  %>
-</div>
 
+<% if can?(:crud, @question) %>
+  <div>
+    <%= link_to 'Edit', edit_question_path(@question) %>
+    |
+    <%# 
+      Regular HTML links can only make GET requests. "link_to"
+      allows us to use other verbs such as DELETE. We pass a named
+      argument called "method" with the symbol of the HTTP verb as
+      an argument. If you confirm with the dialog then it will 
+      make the request.
+    %>
+    <%= link_to(
+        'Delete', 
+        question_path(@question),
+        method: :delete,
+        data: { confirm: "Are you sure you want to delete this question?"}
+      ) 
+    %>
+  </div>
+<% end %>
 <h2><%= @answers.count %> Answers</h2>
 
 <%# 
@@ -59,17 +62,20 @@
     <li>
       <p>
         <%= answer.body %> <br>
-        <small>
-        <%= link_to(
-          'Delete', 
-          answer_path(answer),
-          method: :delete,
-          data: { confirm: "Are you sure?" }
-        ) %>
-        </small>
+        <% if can?(:crud, answer) %>
+          <small>
+          <%= link_to(
+            'Delete', 
+            answer_path(answer),
+            method: :delete,
+            data: { confirm: "Are you sure?" }
+          ) %>
+          </small>
+        <% end %>
         -
         <small>
-          Answered <%= time_ago_in_words(answer.created_at) %> ago by <%= answer.user&.full_name || "[deleted]" %>
+          Answered <%= time_ago_in_words(answer.created_at) %> ago 
+          by <%= answer.user&.full_name || "[deleted]" %>
         </small>
       </p>
     </li>

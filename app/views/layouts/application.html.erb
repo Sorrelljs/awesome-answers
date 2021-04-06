@@ -13,6 +13,8 @@
   <body>
     <!-- "link_to" is a method known as a view helper. Use it to generate an anchor tag -->
     <!-- <a href="/">Home</a> -->
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light nav">
     <%= link_to 'Home', root_path %>
     -
     <%= link_to 'Contact Us', contact_new_path %>
@@ -36,7 +38,7 @@
         <%= message %>
       </div>
     <% end %>
-    
+      </nav>
     <!-- yield will render the template of the current controller action -->
     <%= yield %>
   </body>
